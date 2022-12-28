@@ -1,49 +1,31 @@
-| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-S2 | ESP32-S3 |
-| ----------------- | ----- | -------- | -------- | -------- | -------- |
+| Supported Targets | ESP32 SOLO V2 | 
+| ----------------- | ------------- |
 
-# Blink Example
+# Example
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+Этот пример создан с использованием фреймфорка ESP-IDF, в редакторе VScode (Ubuntu 22.04).
+Для прошивания чипа использовался USB-TTL переходник (ch341 driver). Для корректной работы следует удалить компонент brltty.
 
-This example demonstrates how to blink a LED using GPIO or using the [led_strip](https://components.espressif.com/component/espressif/led_strip) component for the addressable LED, i.e. [WS2812](http://www.world-semi.com/Certifications/WS2812B.html).
-
-The `led_strip` is installed via [component manager](main/idf_component.yml).
 
 ## How to Use Example
 
-Before project configuration and build, be sure to set the correct chip target using `idf.py set-target <chip_name>`.
+Перед сборкой проекта необходимо настроить `idf.py menuconfig` для работы на 1 ядре с 4 мб памяти.
 
 ### Hardware Required
 
-* A development board with Espressif SoC (e.g., ESP32-DevKitC, ESP-WROVER-KIT, etc.)
-* A USB cable for Power supply and programming
+В качестве примера создается массив структур типа:
 
-Some development boards use an addressable LED instead of a regular one. These development boards include:
+| State | Input | Output |
+| ----- | ----- | ------ |
+| 0     | GPIO2 | GPIO14 |
+| 0     | GPIO13| GPIO25 |
+| 0     | GPIO4 | GPIO16 |
+| 0     | GPIO9 | GPIO5  |
 
-| Board                | LED type             | Pin                  |
-| -------------------- | -------------------- | -------------------- |
-| ESP32-C3-DevKitC-1   | Addressable          | GPIO8                |
-| ESP32-C3-DevKitM-1   | Addressable          | GPIO8                |
-| ESP32-S2-DevKitM-1   | Addressable          | GPIO18               |
-| ESP32-S2-Saola-1     | Addressable          | GPIO18               |
-| ESP32-S3-DevKitC-1   | Addressable          | GPIO48               |
-
-See [Development Boards](https://www.espressif.com/en/products/devkits) for more information about it.
-
-### Configure the Project
-
-Open the project configuration menu (`idf.py menuconfig`).
-
-In the `Example Configuration` menu:
-
-* Select the LED type in the `Blink LED type` option.
-  * Use `GPIO` for regular LED blink.
-* Set the GPIO number used for the signal in the `Blink GPIO number` option.
-* Set the blinking period in the `Blink period in ms` option.
 
 ### Build and Flash
 
-Run `idf.py -p PORT flash monitor` to build, flash and monitor the project.
+`idf.py -p PORT flash monitor` для сборки и отладки через serial port.
 
 (To exit the serial monitor, type ``Ctrl-]``.)
 
@@ -51,27 +33,33 @@ See the [Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/l
 
 ## Example Output
 
-As you run the example, you will see the LED blinking, according to the previously defined period. For the addressable LED, you can also change the LED color by setting the `led_strip_set_pixel(led_strip, 0, 16, 16, 16);` (LED Strip, Pixel Number, Red, Green, Blue) with values from 0 to 255 in the [source file](main/blink_example_main.c).
+При изменении сконфигурированных входов, в monitor передается JSON строка типа:
 
 ```text
-I (315) example: Example configured to blink addressable LED!
-I (325) example: Turning the LED OFF!
-I (1325) example: Turning the LED ON!
-I (2325) example: Turning the LED OFF!
-I (3325) example: Turning the LED ON!
-I (4325) example: Turning the LED OFF!
-I (5325) example: Turning the LED ON!
-I (6325) example: Turning the LED OFF!
-I (7325) example: Turning the LED ON!
-I (8325) example: Turning the LED OFF!
+{
+	"pinout":	[{
+			"input":	2,
+			"output":	14,
+			"state":	0
+		}, {
+			"input":	13,
+			"output":	25,
+			"state":	1
+		}, {
+			"input":	4,
+			"output":	16,
+			"state":	0
+		}, {
+			"input":	9,
+			"output":	5,
+			"state":	1
+		}]
+
+}
 ```
 
-Note: The color order could be different according to the LED model.
-
-The pixel number indicates the pixel position in the LED strip. For a single LED, use 0.
 
 ## Troubleshooting
 
-* If the LED isn't blinking, check the GPIO or the LED type selection in the `Example Configuration` menu.
-
-For any technical queries, please open an [issue](https://github.com/espressif/esp-idf/issues) on GitHub. We will get back to you soon.
+* Проверить надежность посадки/пайки проводов.
+* В случае неккоректной работы драйвера, удалить из системы компонент `brltty`
