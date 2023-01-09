@@ -7,32 +7,59 @@
 #include <stdbool.h>
 #include <cJSON.h>
 
+#define BIT_MASK(val, mask) ((val) & (1 << (mask)))// макрос возвращает бит mask в значении val
 
-int LEN_PINOUT = 0;// Колличество пар вход-выход в массиве (колличество его элементов).
+#define LEN_PINOUT 4 // Колличество пар вход-выход в массиве (колличество его элементов).
 
 /**
- * Описывает пару вход-выход, определяет состояние пары. 
- * 
+ * Описывает пару вход-выход.
+ *
  */
-typedef struct pin_out
+static struct Pin_out_adress
 {
-    int input_adr; /*!< Адресс входа. */
-    int output_adr; /*!< Адрес выхода. */
-    bool bin_state /*!< Состояние выхода. */
-} pin_out;
+    uint32_t input_adr[LEN_PINOUT];   /*!< Адресс входа. */
+    uint32_t output_adr[LEN_PINOUT]; /*!< Адрес выхода. */
+}Pin_out_adr={{0,1,2,3},{4,5,6,8}};
+
+/**
+ * Хранит биты состояний вход-выход.
+ *
+ */
+struct Pin_out_register{
+    uint32_t pin_in;
+    uint32_t pins_out_reg;
+}Pin_out_reg;
+
 
 int old_inputs_value = 0; // Хранит прошлое значение "контрольной суммы"
 
+/**
+ * @brief Инициализирует выходы/выходы.
+ *
+ * @return esp_err_t 1 - успех.
+ *
+ */
+uint32_t GPIO_Init()
+{
+    for (uint32_t i = 0; i < LEN_PINOUT; i++){
+        if (gpio_set_direction(Pin_out_adr.output_adr[i], GPIO_MODE_OUTPUT)){
+            return 0;
+        }
+        if (gpio_set_direction(Pin_out_adr.input_adr[i], GPIO_MODE_INPUT)){
+            return 0;
+        }
+    }
+    return 1;
+}
 
 /**
  * @brief Создает и принтует JSON строку.
- * 
- * @param p указатель на массив структур.
+ *
  * @return string указатель на строку в куче, которую необходимо освободить
- * 
+ *
  */
 
-char *create_monitor_with_helpers(struct pin_out *p)
+char *create_monitor_with_helpers()
 {
     char *string = NULL;
     cJSON *pinouts = NULL;
@@ -40,101 +67,111 @@ char *create_monitor_with_helpers(struct pin_out *p)
     cJSON *monitor = cJSON_CreateObject();
     pinouts = cJSON_AddArrayToObject(monitor, "pinout");
 
-    for (int i=0 ; i < LEN_PINOUT;i++)
-    {
+    for (uint32_t i = 0; i < LEN_PINOUT; i++){
         cJSON *pinout = cJSON_CreateObject();
 
-        cJSON_AddNumberToObject(pinout,"input",p->input_adr);
+        cJSON_AddNumberToObject(pinout,"input",Pin_out_adr.input_adr[i]);
 
-        cJSON_AddNumberToObject(pinout,"output",p->output_adr);
+        cJSON_AddNumberToObject(pinout,"output",Pin_out_adr.output_adr[i]);
 
-        cJSON_AddNumberToObject(pinout,"state",p->bin_state);
+        cJSON_AddNumberToObject(pinout,"state",0);
 
         cJSON_AddItemToArray(pinouts, pinout);
-        p +=1;
     }
 
     string = cJSON_Print(monitor);
     printf(string);
-    if (string == NULL)
-    {
+    if (string == NULL){
         printf("Failed to print monitor.\n");
     }
     return string;
 }
 
 /**
- * @brief Определяет выходы, устанавливает их логическое состояние.
- * 
- * @param p указатель на массив структур.
- * @param inputs_value "контрольная сумма".
- * 
+ * @brief Устанавливает логическое состояние выходов.
+ *
  */
-void define_and_set_output(struct pin_out *p, int inputs_value)
+uint32_t set_output()
 {
-    for (int i = 0; i < LEN_PINOUT; i++)
-    {
-         gpio_set_direction(p->output_adr, GPIO_MODE_OUTPUT); 
-        if (inputs_value % 2)
-        {
-            p->bin_state = true;
-            gpio_set_level(p->output_adr, 1);
+    for (uint32_t i = 0; i < LEN_PINOUT; i++){
+        if(BIT_MASK(Pin_out_reg.pins_out_reg,Pin_out_adr.input_adr[i])){
+            if(gpio_set_level(Pin_out_adr.output_adr[i],1)== -1){
+                return 1;
+            }
         }
-        else
-        {
-            p->bin_state = false;
-            gpio_set_level(p->output_adr, 0);
+        else{
+            if(gpio_set_level(Pin_out_adr.output_adr[i],0)== -1){
+                return 1;
+            }
         }
-        inputs_value = inputs_value / 2;
-        p -= 1;
     }
+    return 0;
 }
 
 /**
- *@brief Определяет состояния входов, опрашивает их. Переводит стостояния входов в 10-чное число inputs_value ("контрольная сумма")
+ *@brief Опрашивает  состояния входов. Сохраняет их в int переменной.
  *
- *@param p указатель на массив структур.
- *       num_of_element Колличество пар вход-выход в массиве (колличество его элементов).
-*/
-void define_and_get_input(struct pin_out *p , int num_of_element)
+ */
+uint32_t get_input()
 {
-    extern int LEN_PINOUT;
-    LEN_PINOUT = num_of_element;
+    uint32_t input_bit = 0;
+    uint32_t sum_val = 0;
+    for (uint32_t i = 0; i < LEN_PINOUT; i++){
+        if(gpio_get_level(Pin_out_adr.input_adr[i])!=-1){
+            input_bit = 1<<Pin_out_adr.input_adr[i];
+            sum_val = sum_val + input_bit;
+        }
+        else{
+            return 1;
+        }
+    }
+    Pin_out_reg.pin_in = sum_val;
 
-    int inputs_value = 0;
-    for (int i = 0; i < LEN_PINOUT; i++) 
-    {   
-        gpio_set_direction(p->input_adr, GPIO_MODE_INPUT);
-        p->bin_state  = gpio_get_level(p->input_adr);
-        inputs_value = inputs_value * 2 + p->bin_state;
-        p += 1;
+    if (Pin_out_reg.pin_in != Pin_out_reg.pins_out_reg){
+            if (set_output()){  
+            printf("Output error!");
+            for (int i = 10; i >= 0; i--) {
+                printf("Restarting in %d seconds...\n", i);
+                vTaskDelay(1000 / portTICK_PERIOD_MS);
+            }
+            printf("Restarting now.\n");;
+            esp_restart();
+            }
+        free(create_monitor_with_helpers());
     }
-    if (old_inputs_value != inputs_value)
-    {
-        define_and_set_output(p -= 1, inputs_value);
-        free(create_monitor_with_helpers(p -= LEN_PINOUT-1));
-    }
-    old_inputs_value = inputs_value;
+    Pin_out_reg.pins_out_reg = sum_val;
+    
+    return 0;
 }
 
 
-void app_main(void){
+void app_main(void)
+{
+    if (GPIO_Init()){  
+        printf("Initialization error!");
 
-    pin_out test_pin[] = 
-    {
-    {2, 14, false},
-    {13, 25, false},
-    {4, 16, false},
-    {9, 5, false}
-
-    };
-
-    int number_of_elements = 4;
-
-    while(true){
-        define_and_get_input(&test_pin, number_of_elements );
-        vTaskDelay(10);
+        for (int i = 10; i >= 0; i--) {
+            printf("Restarting in %d seconds...\n", i);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+        }
+        printf("Restarting now.\n");;
+        esp_restart();
+    }
+    else{
+        printf("Initialization was successful!");
     }
 
-
+    while (true){
+            
+        if (get_input()){  
+            printf("Input error!");
+            for (int i = 10; i >= 0; i--) {
+                printf("Restarting in %d seconds...\n", i);
+                vTaskDelay(1000 / portTICK_PERIOD_MS);
+            }
+            printf("Restarting now.\n");;
+            esp_restart();
+        }
+        vTaskDelay(10);
+    }
 }
