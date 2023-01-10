@@ -1,0 +1,125 @@
+\hypertarget{blink__example__main_8c}{}\doxysection{main/blink\+\_\+example\+\_\+main.c File Reference}
+\label{blink__example__main_8c}\index{main/blink\_example\_main.c@{main/blink\_example\_main.c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}sdkconfig.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}freertos/\+Free\+RTOS.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}freertos/task.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driver/gpio.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$c\+JSON.\+h$>$}\newline
+Include dependency graph for blink\+\_\+example\+\_\+main.\+c\+:
+% FIG 0
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{blink__example__main_8c_a89610af48bea5a85cc1feaba9662cc03}\label{blink__example__main_8c_a89610af48bea5a85cc1feaba9662cc03}} 
+\#define {\bfseries BIT\+\_\+\+MASK}(val,  mask)~((val) \& (1 $<$$<$ (mask)))
+\item 
+\mbox{\Hypertarget{blink__example__main_8c_ac528c49b002fc9bb99d5aefe32636a6d}\label{blink__example__main_8c_ac528c49b002fc9bb99d5aefe32636a6d}} 
+\#define {\bfseries LEN\+\_\+\+PINOUT}~4
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{blink__example__main_8c_a825a38d3f87d03f011520ff66261fe74}\label{blink__example__main_8c_a825a38d3f87d03f011520ff66261fe74}} 
+void \mbox{\hyperlink{blink__example__main_8c_a825a38d3f87d03f011520ff66261fe74}{GPIO\+\_\+\+Init}} ()
+\begin{DoxyCompactList}\small\item\em Инициализирует выходы/выходы. \end{DoxyCompactList}\item 
+char $\ast$ \mbox{\hyperlink{blink__example__main_8c_a8d063130ddc05657b4d1a885e575958a}{create\+\_\+monitor\+\_\+with\+\_\+helpers}} ()
+\begin{DoxyCompactList}\small\item\em Создает и принтует JSON строку. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{blink__example__main_8c_a78a2aeaf6d7854bff84daf9b1b2fab60}{set\+\_\+output}} ()
+\begin{DoxyCompactList}\small\item\em Устанавливает логическое состояние выходов. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{blink__example__main_8c_a0dc34c0e0d4421f65c7f793b1f475101}{get\+\_\+input}} ()
+\begin{DoxyCompactList}\small\item\em Опрашивает входы, контролирует изменения. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{blink__example__main_8c_a630544a7f0a2cc40d8a7fefab7e2fe70}\label{blink__example__main_8c_a630544a7f0a2cc40d8a7fefab7e2fe70}} 
+void {\bfseries app\+\_\+main} (void)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>uint32\_t {\bfseries pin\_in}\\
+\>uint32\_t {\bfseries pins\_out\_reg}\\
+\} \mbox{\hyperlink{blink__example__main_8c_a3cdfefe296f8b98ea51141bd4fcf25bc}{Pin\_out\_reg}}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Davidvoskii Nikita (\href{mailto:Davidovskiinikita@gmail.com}{\texttt{ Davidovskiinikita@gmail.\+com}}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2023-\/01-\/10
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2023 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{blink__example__main_8c_a8d063130ddc05657b4d1a885e575958a}\label{blink__example__main_8c_a8d063130ddc05657b4d1a885e575958a}} 
+\index{blink\_example\_main.c@{blink\_example\_main.c}!create\_monitor\_with\_helpers@{create\_monitor\_with\_helpers}}
+\index{create\_monitor\_with\_helpers@{create\_monitor\_with\_helpers}!blink\_example\_main.c@{blink\_example\_main.c}}
+\doxysubsubsection{\texorpdfstring{create\_monitor\_with\_helpers()}{create\_monitor\_with\_helpers()}}
+{\footnotesize\ttfamily char$\ast$ create\+\_\+monitor\+\_\+with\+\_\+helpers (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Создает и принтует JSON строку. 
+
+\begin{DoxyReturn}{Returns}
+string указатель на строку в куче, которую необходимо освободить 
+\end{DoxyReturn}
+\mbox{\Hypertarget{blink__example__main_8c_a0dc34c0e0d4421f65c7f793b1f475101}\label{blink__example__main_8c_a0dc34c0e0d4421f65c7f793b1f475101}} 
+\index{blink\_example\_main.c@{blink\_example\_main.c}!get\_input@{get\_input}}
+\index{get\_input@{get\_input}!blink\_example\_main.c@{blink\_example\_main.c}}
+\doxysubsubsection{\texorpdfstring{get\_input()}{get\_input()}}
+{\footnotesize\ttfamily uint32\+\_\+t get\+\_\+input (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Опрашивает входы, контролирует изменения. 
+
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t ESP\+\_\+\+OK -\/ успех, ESP\+\_\+\+FAIL -\/ ошибка. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{blink__example__main_8c_a78a2aeaf6d7854bff84daf9b1b2fab60}\label{blink__example__main_8c_a78a2aeaf6d7854bff84daf9b1b2fab60}} 
+\index{blink\_example\_main.c@{blink\_example\_main.c}!set\_output@{set\_output}}
+\index{set\_output@{set\_output}!blink\_example\_main.c@{blink\_example\_main.c}}
+\doxysubsubsection{\texorpdfstring{set\_output()}{set\_output()}}
+{\footnotesize\ttfamily uint32\+\_\+t set\+\_\+output (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Устанавливает логическое состояние выходов. 
+
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t ESP\+\_\+\+OK (0) = успех 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{blink__example__main_8c_abd75c2f288fb92ee13f1b85605e6e366}\label{blink__example__main_8c_abd75c2f288fb92ee13f1b85605e6e366}} 
+\index{blink\_example\_main.c@{blink\_example\_main.c}!input\_adr@{input\_adr}}
+\index{input\_adr@{input\_adr}!blink\_example\_main.c@{blink\_example\_main.c}}
+\doxysubsubsection{\texorpdfstring{input\_adr}{input\_adr}}
+{\footnotesize\ttfamily uint32\+\_\+t input\+\_\+adr\mbox{[}LEN\+\_\+\+PINOUT\mbox{]}}
+
+Адресс входа. \mbox{\Hypertarget{blink__example__main_8c_af2cf492abc8f6ed1991b61f1950c7885}\label{blink__example__main_8c_af2cf492abc8f6ed1991b61f1950c7885}} 
+\index{blink\_example\_main.c@{blink\_example\_main.c}!output\_adr@{output\_adr}}
+\index{output\_adr@{output\_adr}!blink\_example\_main.c@{blink\_example\_main.c}}
+\doxysubsubsection{\texorpdfstring{output\_adr}{output\_adr}}
+{\footnotesize\ttfamily uint32\+\_\+t output\+\_\+adr\mbox{[}LEN\+\_\+\+PINOUT\mbox{]}}
+
+Адрес выхода. \mbox{\Hypertarget{blink__example__main_8c_a3cdfefe296f8b98ea51141bd4fcf25bc}\label{blink__example__main_8c_a3cdfefe296f8b98ea51141bd4fcf25bc}} 
+\index{blink\_example\_main.c@{blink\_example\_main.c}!Pin\_out\_reg@{Pin\_out\_reg}}
+\index{Pin\_out\_reg@{Pin\_out\_reg}!blink\_example\_main.c@{blink\_example\_main.c}}
+\doxysubsubsection{\texorpdfstring{}{}}
+{\footnotesize\ttfamily struct \{ ... \}  Pin\+\_\+out\+\_\+reg}
+
+Хранит биты состояний вход-\/выход. 

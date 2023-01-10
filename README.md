@@ -1,5 +1,5 @@
-| Supported Targets | ESP32 SOLO V2 | 
-| ----------------- | ------------- |
+| Supported Targets | ESP32 SOLO1 V1 | 
+| ----------------- | -------------- |
 
 # Example
 
@@ -13,14 +13,29 @@
 
 ### Hardware Required
 
-В качестве примера создается массив структур типа:
+В качестве примера создается статическая структура массивов:
+```
+static struct 
+{
+    uint32_t input_adr[LEN_PINOUT];   /*!< Адресс входа. */
+    uint32_t output_adr[LEN_PINOUT]; /*!< Адрес выхода. */
+}Pin_out_adr={{2,13,4,9},{14,25,16,5}};
+```
 
-| State | Input | Output |
-| ----- | ----- | ------ |
-| 0     | GPIO2 | GPIO14 |
-| 0     | GPIO13| GPIO25 |
-| 0     | GPIO4 | GPIO16 |
-| 0     | GPIO9 | GPIO5  |
+|  uint32_t input_adr | uint32_t output_adr |
+| ------------------- | ------------------- |
+|      GPIO2          |      GPIO14         |
+|      GPIO13         |      GPIO25         |
+|      GPIO4          |      GPIO16         |
+|      GPIO9          |      GPIO5          |
+
+Значения состояния входов и выходов содержится в структуре:
+```
+struct {
+    uint32_t pin_in;
+    uint32_t pins_out_reg;
+}Pin_out_reg;
+```
 
 
 ### Build and Flash
@@ -37,7 +52,7 @@ See the [Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/l
 
 ```text
 {
-	"pinout":	[{
+	"pinout_v2":	[{
 			"input":	2,
 			"output":	14,
 			"state":	0

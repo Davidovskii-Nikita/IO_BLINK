@@ -1,0 +1,137 @@
+\hypertarget{structled__strip__t}{}\doxysection{led\+\_\+strip\+\_\+t Struct Reference}
+\label{structled__strip__t}\index{led\_strip\_t@{led\_strip\_t}}
+
+
+LED strip interface definition.  
+
+
+
+
+{\ttfamily \#include $<$led\+\_\+strip\+\_\+interface.\+h$>$}
+
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+esp\+\_\+err\+\_\+t($\ast$ \mbox{\hyperlink{structled__strip__t_a634f88b9e82155f97b6262e0b49565ef}{set\+\_\+pixel}} )(\mbox{\hyperlink{structled__strip__t}{led\+\_\+strip\+\_\+t}} $\ast$strip, uint32\+\_\+t index, uint32\+\_\+t red, uint32\+\_\+t green, uint32\+\_\+t blue)
+\begin{DoxyCompactList}\small\item\em Set RGB for a specific pixel. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t($\ast$ \mbox{\hyperlink{structled__strip__t_a31295f688217f75eaf4639685e69e12b}{refresh}} )(\mbox{\hyperlink{structled__strip__t}{led\+\_\+strip\+\_\+t}} $\ast$strip)
+\begin{DoxyCompactList}\small\item\em Refresh memory colors to LEDs. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t($\ast$ \mbox{\hyperlink{structled__strip__t_ac1b971ea5d539d5b21953556fb453d3c}{clear}} )(\mbox{\hyperlink{structled__strip__t}{led\+\_\+strip\+\_\+t}} $\ast$strip)
+\begin{DoxyCompactList}\small\item\em Clear LED strip (turn off all LEDs) \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t($\ast$ \mbox{\hyperlink{structled__strip__t_a77337bce36b273599b3cbaafdc8821b0}{del}} )(\mbox{\hyperlink{structled__strip__t}{led\+\_\+strip\+\_\+t}} $\ast$strip)
+\begin{DoxyCompactList}\small\item\em Free LED strip resources. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+LED strip interface definition. 
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structled__strip__t_ac1b971ea5d539d5b21953556fb453d3c}\label{structled__strip__t_ac1b971ea5d539d5b21953556fb453d3c}} 
+\index{led\_strip\_t@{led\_strip\_t}!clear@{clear}}
+\index{clear@{clear}!led\_strip\_t@{led\_strip\_t}}
+\doxysubsubsection{\texorpdfstring{clear}{clear}}
+{\footnotesize\ttfamily esp\+\_\+err\+\_\+t($\ast$ led\+\_\+strip\+\_\+t\+::clear) (\mbox{\hyperlink{structled__strip__t}{led\+\_\+strip\+\_\+t}} $\ast$strip)}
+
+
+
+Clear LED strip (turn off all LEDs) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em strip} & LED strip \\
+\hline
+{\em timeout\+\_\+ms} & timeout value for clearing task\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK\+: Clear LEDs successfully
+\item ESP\+\_\+\+FAIL\+: Clear LEDs failed because some other error occurred 
+\end{DoxyItemize}
+\end{DoxyReturn}
+\mbox{\Hypertarget{structled__strip__t_a77337bce36b273599b3cbaafdc8821b0}\label{structled__strip__t_a77337bce36b273599b3cbaafdc8821b0}} 
+\index{led\_strip\_t@{led\_strip\_t}!del@{del}}
+\index{del@{del}!led\_strip\_t@{led\_strip\_t}}
+\doxysubsubsection{\texorpdfstring{del}{del}}
+{\footnotesize\ttfamily esp\+\_\+err\+\_\+t($\ast$ led\+\_\+strip\+\_\+t\+::del) (\mbox{\hyperlink{structled__strip__t}{led\+\_\+strip\+\_\+t}} $\ast$strip)}
+
+
+
+Free LED strip resources. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em strip} & LED strip\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK\+: Free resources successfully
+\item ESP\+\_\+\+FAIL\+: Free resources failed because error occurred 
+\end{DoxyItemize}
+\end{DoxyReturn}
+\mbox{\Hypertarget{structled__strip__t_a31295f688217f75eaf4639685e69e12b}\label{structled__strip__t_a31295f688217f75eaf4639685e69e12b}} 
+\index{led\_strip\_t@{led\_strip\_t}!refresh@{refresh}}
+\index{refresh@{refresh}!led\_strip\_t@{led\_strip\_t}}
+\doxysubsubsection{\texorpdfstring{refresh}{refresh}}
+{\footnotesize\ttfamily esp\+\_\+err\+\_\+t($\ast$ led\+\_\+strip\+\_\+t\+::refresh) (\mbox{\hyperlink{structled__strip__t}{led\+\_\+strip\+\_\+t}} $\ast$strip)}
+
+
+
+Refresh memory colors to LEDs. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em strip} & LED strip \\
+\hline
+{\em timeout\+\_\+ms} & timeout value for refreshing task\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK\+: Refresh successfully
+\item ESP\+\_\+\+FAIL\+: Refresh failed because some other error occurred
+\end{DoxyItemize}
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+\+: After updating the LED colors in the memory, a following invocation of this API is needed to flush colors to strip. 
+\end{DoxyNote}
+\mbox{\Hypertarget{structled__strip__t_a634f88b9e82155f97b6262e0b49565ef}\label{structled__strip__t_a634f88b9e82155f97b6262e0b49565ef}} 
+\index{led\_strip\_t@{led\_strip\_t}!set\_pixel@{set\_pixel}}
+\index{set\_pixel@{set\_pixel}!led\_strip\_t@{led\_strip\_t}}
+\doxysubsubsection{\texorpdfstring{set\_pixel}{set\_pixel}}
+{\footnotesize\ttfamily esp\+\_\+err\+\_\+t($\ast$ led\+\_\+strip\+\_\+t\+::set\+\_\+pixel) (\mbox{\hyperlink{structled__strip__t}{led\+\_\+strip\+\_\+t}} $\ast$strip, uint32\+\_\+t index, uint32\+\_\+t red, uint32\+\_\+t green, uint32\+\_\+t blue)}
+
+
+
+Set RGB for a specific pixel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em strip} & LED strip \\
+\hline
+{\em index} & index of pixel to set \\
+\hline
+{\em red} & red part of color \\
+\hline
+{\em green} & green part of color \\
+\hline
+{\em blue} & blue part of color\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK\+: Set RGB for a specific pixel successfully
+\item ESP\+\_\+\+ERR\+\_\+\+INVALID\+\_\+\+ARG\+: Set RGB for a specific pixel failed because of invalid parameters
+\item ESP\+\_\+\+FAIL\+: Set RGB for a specific pixel failed because other error occurred 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+managed\+\_\+components/espressif\+\_\+\+\_\+led\+\_\+strip/interface/led\+\_\+strip\+\_\+interface.\+h\end{DoxyCompactItemize}

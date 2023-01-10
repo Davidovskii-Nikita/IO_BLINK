@@ -1,0 +1,77 @@
+$\vert$ Supported Targets $\vert$ ESP32 SOLO1 V1 $\vert$ $\vert$ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/--- $\vert$ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/--- $\vert$\hypertarget{md_README_autotoc_md0}{}\doxysection{Example}\label{md_README_autotoc_md0}
+Этот пример создан с использованием фреймфорка ESP-\/\+IDF, в редакторе VScode (Ubuntu 22.\+04). Для прошивания чипа использовался USB-\/\+TTL переходник (ch341 driver). Для корректной работы следует удалить компонент brltty.\hypertarget{md_README_autotoc_md1}{}\doxysubsection{How to Use Example}\label{md_README_autotoc_md1}
+Перед сборкой проекта необходимо настроить {\ttfamily idf.\+py menuconfig} для работы на 1 ядре с 4 мб памяти.\hypertarget{md_README_autotoc_md2}{}\doxysubsubsection{Hardware Required}\label{md_README_autotoc_md2}
+В качестве примера создается статическая структура массивов\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{static struct }
+\DoxyCodeLine{\{}
+\DoxyCodeLine{    uint32\_t input\_adr[LEN\_PINOUT];   /*!< Адресс входа. */}
+\DoxyCodeLine{    uint32\_t output\_adr[LEN\_PINOUT]; /*!< Адрес выхода. */}
+\DoxyCodeLine{\}Pin\_out\_adr=\{\{2,13,4,9\},\{14,25,16,5\}\};}
+
+\end{DoxyCode}
+
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ uint32\+\_\+t input\+\_\+adr   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ uint32\+\_\+t output\+\_\+adr    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ uint32\+\_\+t input\+\_\+adr   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ uint32\+\_\+t output\+\_\+adr    }\\\cline{1-2}
+\endhead
+GPIO2   &GPIO14    \\\cline{1-2}
+GPIO13   &GPIO25    \\\cline{1-2}
+GPIO4   &GPIO16    \\\cline{1-2}
+GPIO9   &GPIO5   \\\cline{1-2}
+\end{longtabu}
+
+
+Значения состояния входов и выходов содержится в структуре\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{struct \{}
+\DoxyCodeLine{    uint32\_t pin\_in;}
+\DoxyCodeLine{    uint32\_t pins\_out\_reg;}
+\DoxyCodeLine{\}Pin\_out\_reg;}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md3}{}\doxysubsubsection{Build and Flash}\label{md_README_autotoc_md3}
+{\ttfamily idf.\+py -\/p PORT flash monitor} для сборки и отладки через serial port.
+
+(To exit the serial monitor, type {\ttfamily Ctrl-\/\mbox{]}}.)
+
+See the \href{https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html}{\texttt{ Getting Started Guide}} for full steps to configure and use ESP-\/\+IDF to build projects.\hypertarget{md_README_autotoc_md4}{}\doxysubsection{Example Output}\label{md_README_autotoc_md4}
+При изменении сконфигурированных входов, в monitor передается JSON строка типа\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{    "{}pinout\_v2"{}:    [\{}
+\DoxyCodeLine{            "{}input"{}:    2,}
+\DoxyCodeLine{            "{}output"{}:   14,}
+\DoxyCodeLine{            "{}state"{}:    0}
+\DoxyCodeLine{        \}, \{}
+\DoxyCodeLine{            "{}input"{}:    13,}
+\DoxyCodeLine{            "{}output"{}:   25,}
+\DoxyCodeLine{            "{}state"{}:    1}
+\DoxyCodeLine{        \}, \{}
+\DoxyCodeLine{            "{}input"{}:    4,}
+\DoxyCodeLine{            "{}output"{}:   16,}
+\DoxyCodeLine{            "{}state"{}:    0}
+\DoxyCodeLine{        \}, \{}
+\DoxyCodeLine{            "{}input"{}:    9,}
+\DoxyCodeLine{            "{}output"{}:   5,}
+\DoxyCodeLine{            "{}state"{}:    1}
+\DoxyCodeLine{        \}]}
+\DoxyCodeLine{}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md5}{}\doxysubsection{Troubleshooting}\label{md_README_autotoc_md5}
+
+\begin{DoxyItemize}
+\item Проверить надежность посадки/пайки проводов.
+\item В случае неккоректной работы драйвера, удалить из системы компонент {\ttfamily brltty} 
+\end{DoxyItemize}
